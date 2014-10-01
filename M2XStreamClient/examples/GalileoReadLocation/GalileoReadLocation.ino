@@ -4,8 +4,8 @@
 
 #include "M2XStreamClient.h"
 
-char ssid[] = "<ssid>"; //  your network SSID (name)
-char pass[] = "<WPA password>";    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "'<ssid>'";         //  your network SSID (name); note the inner single quote marks, these must stay in-place for the Galileo
+char pass[] = "'<WPA password>'"; // your network password (use for WPA, or use as key for WEP); note the inner single quote marks, these must stay in-place for the Galileo
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
