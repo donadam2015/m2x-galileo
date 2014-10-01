@@ -18,7 +18,7 @@ Please consult the [M2X glossary](https://m2x.att.com/developer/documentation/gl
 How to Install the library
 ==========================
 
-This library depends on [jsonlite](https://github.com/citrusbyte/jsonlite), the installation steps are as follows:
+This library depends on [jsonlite](https://github.com/citrusbyte/jsonlite), and the installation steps are as follows:
 
 1. Clone the [jsonlite](https://github.com/citrusbyte/jsonlite) repository.
 
@@ -38,7 +38,7 @@ This library depends on [jsonlite](https://github.com/citrusbyte/jsonlite), the 
 WiFi Hardware Setup & SSH Connection
 =======================
 
-There are several instructionals:
+Getting WiFi working on the Galileo may require some additional steps. There are several helpful instructionals that we recommend:
   * http://bentuino.com/galileo-goes-wireless/
   * http://www.malinov.com/Home/sergey-s-blog/intelgalileo-addingwifi
   * http://www.hackshed.co.uk/how-to-use-wifi-with-the-intel-galileo/
@@ -51,7 +51,7 @@ http://wireless.kernel.org/en/users/Drivers/iwlwifi
 Troubleshooting
 ---------------
 
-#### How to transfer a file over SSH into the Galileo
+#### How do I transfer a file over SSH into the Galileo?
 
 ```
 scp /path/to/file root@1.1.1.1:/lib/firmware/
@@ -61,14 +61,14 @@ Replace [1.1.1.1] with the Galileo's IP Address
 
 ---
 
-#### How do I know my mini PCIe card is being detected
+#### How do I know my mini PCIe card is being detected?
 
-You can run the following command to look for a PCIe card plugged in
+You can run the following command to look for a PCIe card that is plugged in:
 ```
 lspci -k | grep wifi
 ```
 
-And you will see something like
+And you will see something like:
 ```
 01:00.0 Class 0280: 8086:4235 iwlwifi
 ```
@@ -83,7 +83,7 @@ wlan0: Failed to initialize driver interface
 ifconfig: SIOCGIFFLAGS: No such device
 ```
 
-#### Solution
+##### Solution
 
 Drivers are not properly installed or device needs to be restarted so drivers can initialize.
 
@@ -98,7 +98,7 @@ Sending discover...
 Sending discover...
 No lease, failing
 ```
-#### Solution
+##### Solution
 ```sh
 killall wpa_supplicant
 killall iwlwifi
@@ -126,7 +126,7 @@ char ssid[] = "<ssid>";
 char pass[] = "<WPA password>";
 ```
 
-Just fill in the SSID and password of the Wifi hotspot and you should be good to go.
+Just fill in the SSID and password of the Wifi hotspot your area using.
 
 For an Ethernet Shield, the following variables are needed:
 
@@ -187,7 +187,7 @@ EthernetClient client;
 M2XStreamClient m2xClient(&client, m2xKey);
 ```
 
-In the M2XStreamClient, 4 types of API functions are provided here:
+In the M2XStreamClient, 4 types of API functions are provided:
 
 * `send`: Send stream value to M2X
 * `receive`: Receive stream value from M2X
