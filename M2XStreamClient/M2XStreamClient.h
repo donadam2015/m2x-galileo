@@ -3,7 +3,7 @@
 
 #define MIN(a, b) (((a) > (b))?(b):(a))
 
-#define ARDUINO_PLATFORM
+#define GALILEO_PLATFORM
 
 #ifdef ARDUINO_PLATFORM
 #include "Arduino.h"
@@ -15,6 +15,12 @@
 #include "mbed.h"
 
 #define USER_AGENT "User-Agent: M2X Mbed Client/0.1"
+#endif
+
+#ifdef GALILEO_PLATFORM
+#include "Arduino.h"
+
+#define USER_AGENT "User-Agent: M2X Intel Galileo Client/0.1"
 #endif
 
 #include "Client.h"
@@ -32,6 +38,12 @@
 #define DBGLN(fmt_, data_) printf((fmt_), (data_)); printf("\n")
 #define DBGLNEND printf("\n")
 #endif  // MBED_PLATFORM
+
+#ifdef GALILEO_PLATFORM
+#define DBG(fmt_, data_) Serial.print(data_)
+#define DBGLN(fmt_, data_) Serial.println(data_)
+#define DBGLNEND Serial.println()
+#endif  // ARDUINO_PLATFORM
 #else
 #define DBG(fmt_, data_)
 #define DBGLN(fmt_, data_)

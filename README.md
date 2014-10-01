@@ -1,11 +1,9 @@
-Arduino M2X API Client
+Intel Galileo M2X API Client
 =====================
 
-**NOTE**: We've [changed](https://github.com/attm2x/m2x-arduino/commit/ca3a5484b371f011a30a523465b9aa517d61db25) one API to avoid ambiguity, if you are using the older version of client library, you might need to fix your code.
+The Intel Galileo library is used to send/receive data to/from [AT&amp;T's M2X service](https://m2x.att.com/) from [Intel Galileo](http://arduino.cc/en/ArduinoCertified/IntelGalileo) based devices.
 
-The Arduino library is used to send/receive data to/from [AT&amp;T's M2X service](https://m2x.att.com/) from [Arduino](http://www.arduino.cc/) based devices.
-
-**NOTE**: Unless stated otherwise, the following instructions are specific to [Arduino Uno](http://arduino.cc/en/Main/arduinoBoardUno) boards. If you are using other boards, the exact steps may vary.
+**NOTE**: Unless stated otherwise, the following instructions are specific to Gen 1 boards. If you are using other boards, the exact steps may vary.
 
 Getting Started
 ==========================
@@ -13,7 +11,7 @@ Getting Started
 2. Obtain your _Master Key_ from the Master Keys tab of your [Account Settings](https://m2x.att.com/account) screen.
 3. Create your first [Data Source Blueprint](https://m2x.att.com/blueprints) and copy its _Feed ID_.
 4. Review the [M2X API Documentation](https://m2x.att.com/developer/documentation/overview).
-5. Obtain an Arduino with built-in wifi or ethernet, or a separate wifi or ethernet shield and [set it up](http://arduino.cc/en/Guide/HomePage). These docs were written for an [__Arduino Uno__](http://arduino.cc/en/Main/arduinoBoardUno) with a wifi or ethernet shield but the instructions can be adapted for other Arduino models.
+5. Obtain an Intel Galileo with a compatible Mini PCI-E wifi or ethernet.
 
 Please consult the [M2X glossary](https://m2x.att.com/developer/documentation/glossary) if you have questions about any M2X specific terms.
 
@@ -26,41 +24,91 @@ This library depends on [jsonlite](https://github.com/citrusbyte/jsonlite), the 
 
    **NOTE**: Since we are now using the old v1.1.2 API (we will migrate to the new API soon), please use the fork version of jsonlite listed above instead of the original one.
 
-2. Open the Arduino IDE, click `Sketch->Import Library...->Add Library...`, then navigate to `amalgamated/jsonlite` folder in the cloned jsonlite repository. The jsonlite library will be imported to Arduino this way.
+2. Open the Intel Galileo IDE, click `Sketch->Import Library...->Add Library...`, then navigate to `amalgamated/jsonlite` folder in the cloned jsonlite repository. The jsonlite library will be imported to Intel Galileo IDE this way.
 
    **NOTE**: If you cloned the jsonlite library, there will be three (3) folders named jsonlite:
    * `jsonlite`: the repo folder
    * `jsonlite/jsonlite`: the un-flattened jsonlite source folder
-   * `jsonlite/amalgamated/jsonlite`: the flattened jsonlite source for arduino
+   * `jsonlite/amalgamated/jsonlite`: the flattened jsonlite source
 
    You should use the final library listed here as the first two won't work!
 3. Use the instructions outlined in Step 2 above to import the `M2XStreamClient` library in the current folder.
 4. Now you can find M2X examples under `File->Examples->M2XStreamClient`
 
-Hardware Setup
-==============
+WiFi Hardware Setup & SSH Connection
+=======================
 
-Board Setup
------------
+There are several instructionals:
+  * http://bentuino.com/galileo-goes-wireless/
+  * http://www.malinov.com/Home/sergey-s-blog/intelgalileo-addingwifi
+  * http://www.hackshed.co.uk/how-to-use-wifi-with-the-intel-galileo/
 
-The Arduino website has a very good [tutorial](http://arduino.cc/en/Guide/HomePage) on setting up the Arduino board. It contains detailed instructions on how to install the Arduino IDE, sets up your board for initial testing. Feel free to proceed to the [Arduino site](http://arduino.cc/en/Guide/HomePage) to get a basic idea on Arduino.
+PCI WiFi Drivers
+----------------
 
-Wifi/Ethernet Shield Setup
---------------------------
+http://wireless.kernel.org/en/users/Drivers/iwlwifi
 
-If you are using an [Arduino Yun](http://arduino.cc/en/Main/ArduinoBoardYun) board instead of an [Arduino Uno](http://arduino.cc/en/Main/ArduinoBoardUno) board, you can skip this section since the Yun board already has a Wifi adapter onboard.
+Troubleshooting
+---------------
 
-To send data to the AT&amp;T M2X service, or receive data from the AT&amp;T M2X service, your Arduino board needs a connection to the Internet. Hence, an Arduino [Wifi Shield](http://arduino.cc/en/Main/ArduinoWiFiShield) or [Ethernet Shield](http://arduino.cc/en/Main/ArduinoEthernetShield) is needed to give your board the power to connect to the Internet. To install the shield, hook the shield onto your Arduino board — you can use the pins on the shield the same way as the real pins on the Arduino boards.
+#### How to transfer a file over SSH into the Galileo
+
+```
+scp /path/to/file root@1.1.1.1:/lib/firmware/
+```
+
+Replace [1.1.1.1] with the Galileo's IP Address
+
+---
+
+#### How do I know my mini PCIe card is being detected
+
+You can run the following command to look for a PCIe card plugged in
+```
+lspci -k | grep wifi
+```
+
+And you will see something like
+```
+01:00.0 Class 0280: 8086:4235 iwlwifi
+```
+
+Referenced from: https://communities.intel.com/message/225732
+
+---
+
+#### ifconfig: SIOCGIFFLAGS: No such device
+```
+wlan0: Failed to initialize driver interface
+ifconfig: SIOCGIFFLAGS: No such device
+```
+
+#### Solution
+
+Drivers are not properly installed or device needs to be restarted so drivers can initialize.
+
+---
+
+#### No lease, failing
+```sh
+root@clanton:~# ifup wlan0
+udhcpc (v1.20.2) started
+Sending discover...
+Sending discover...
+Sending discover...
+No lease, failing
+```
+#### Solution
+```sh
+killall wpa_supplicant
+killall iwlwifi
+ifup wlan0
+```
 
 Sensor Setup
 ------------
 
-Different sensors can be hooked up to an Arduino board to provide different properties including temperatures, humidity, etc. You can use a breadboard as well as wires to connect different sensors to your Arduino. For a detailed tutorial on connecting different sensors, please refer to the Arduino [Examples page](http://arduino.cc/en/Tutorial/HomePage).
-
-3G Shield Setup
-------------
-
-If you are using a 3G GSM/GPRS shield with your Arduino, the [M2X Arduino SIMCOM module](https://github.com/attm2x/m2x-arduino-simcom) can be used to connect your device to the AT&T cellular data network.
+Different sensors can be hooked up to an Intel Galileo board to provide different properties including temperatures, humidity, etc. You can use a breadboard as well as wires to connect different sensors to your Intel Galileo. For a detailed tutorial on connecting different sensors, please refer to the Arduino [Examples page](http://arduino.cc/en/Tutorial/HomePage) as the Intel Galileo has the same pin outs.
 
 
 Variables used in Examples
@@ -125,7 +173,7 @@ char streamName[] = "<stream name>";
 Using the M2XStreamClient library
 =========================
 
-The M2X Arduino library can be used with both a Wifi connection and an Ethernet connection. For a Wifi connection, use the following code:
+The M2X Intel Galileo library can be used with both a Wifi connection and an Ethernet connection. For a Wifi connection, use the following code:
 
 ```
 WiFiClient client;
@@ -136,13 +184,6 @@ For an Ethernet connection, use the following code:
 
 ```
 EthernetClient client;
-M2XStreamClient m2xClient(&client, m2xKey);
-```
-
-If you are using an [Arduino Yun](http://arduino.cc/en/Main/ArduinoBoardYun) board, you should use the following code:
-
-```
-YunClient client;
 M2XStreamClient m2xClient(&client, m2xKey);
 ```
 
@@ -197,7 +238,7 @@ Please refer to the comments in the source code for additional information on ho
 Fetch stream value
 ------------------
 
-Since an Arduino board contains very limited memory, we cannot put the whole returned string in memory, parse it into JSON representations and read what we want. Instead, we use a callback-based mechanism here. We parse the returned JSON string piece by piece. Whenever we got a new stream value point, we will call the following callback functions:
+Since most boards contains very limited memory, we cannot put the whole returned string in memory, parse it into JSON representations and read what we want. Instead, we use a callback-based mechanism here. We parse the returned JSON string piece by piece. Whenever we got a new stream value point, we will call the following callback functions:
 
 ```
 typedef void (*stream_value_read_callback)(const char* at,
@@ -235,7 +276,7 @@ int updateLocation(const char* feedId, const char* name,
 
 Different from stream values, locations are attached to feeds rather than streams.
 
-The reason we are providing templated function is due to floating point value precision: on most Arduino boards, `double` is the same as `float`, i.e., 32-bit (4-byte) single precision floating number. That means only 7 digits in the number are reliable. When we are using `double` here to represent latitude/longitude, it means that only 5 digits after the floating point are accurate, which means we can represent as accurate to ~1.1132m distance using `double` here. If you want to represent coordinates that are more specific, you need to use strings here.
+The reason we are providing templated function is due to floating point value precision: on most Intel Galileo boards, `double` is the same as `float`, i.e., 32-bit (4-byte) single precision floating number. That means only 7 digits in the number are reliable. When we are using `double` here to represent latitude/longitude, it means that only 5 digits after the floating point are accurate, which means we can represent as accurate to ~1.1132m distance using `double` here. If you want to represent coordinates that are more specific, you need to use strings here.
 
 Read Datasource Location
 ------------------------
@@ -269,7 +310,7 @@ Delete Values
 You can use the following function to delete values within a stream by providing a `from` and `end` date/time:
 
 ```
-int deleteValues(const char* feedId, const char* streamName, 
+int deleteValues(const char* feedId, const char* streamName,
                  const char* from, const char* end);
 ```
 
@@ -280,58 +321,51 @@ Examples
 
 We provide a series of examples that will help you get an idea of how to use the `M2XStreamClient` library to perform all kinds of tasks.
 
-Note that the examples may apply to certain types of boards. For example, the ones with `Uno` in the name apply to `Arduino Uno` boards only, while the ones with `Yun` only apply to `Arduino Yun` boards.
+Note that the examples contain fictionary variables, and that they need to be configured as per the instructions above before running on your Intel Galileo board. Each of the examples here also needs either a Wifi Shield or an Ethernet Shield hooked up to your device.
 
-Note that the examples contain fictionary variables, and that they need to be configured as per the instructions above before running on your Arduino board. Each of the examples here also needs either a Wifi Shield or an Ethernet Shield hooked up to your device.
+In the `GalileoPost` and `EthernetGalileoPost`, a temperature sensor, a breadboard and 5 wires are also needed to get temperature data, and you will need to wire the board like [this](http://cl.ly/image/3M0P3T1A0G0l) before running the code.
 
-In the `UnoPost`, `EthernetUnoPost` and `YunPost`, a temperature sensor, a breadboard and 5 wires are also needed to get temperature data, and you will need to wire the board like [this](http://cl.ly/image/3M0P3T1A0G0l) before running the code.
+After you have configured your variables and the board, plug the Intel Galileo board into your computer via a Micro-USB cable, click `Verify` in the Intel Galileo IDE, then click `Upload`, and the code should be uploaded to the board. You can check all the outputs in the `Serial Monitor` of the Intel Galileo IDE.
 
-After you have configured your variables and the board, plug the Arduino board into your computer via a Micro-USB cable, click `Verify` in the Arduino IDE, then click `Upload`, and the code should be uploaded to the board. You can check all the outputs in the `Serial Monitor` of the Arduino IDE.
-
-UnoPost
+GalileoPost
 -------
 
-This example shows how to post temperatures to M2X. Before running this example, you will need to have a valid M2X Key, a feed ID and a stream name. The Arduino board needs to be configured like [this](http://cl.ly/image/3M0P3T1A0G0l). In this example, we are using an [Arduino Uno](http://arduino.cc/en/Main/arduinoBoardUno) board. If you are using other boards, keep in mind that we are reading from `A0` in the code and the wiring should be similar to this one shown in the illustration.
+This example shows how to post temperatures to M2X. Before running this example, you will need to have a valid M2X Key, a feed ID and a stream name. The Intelo Galileo board needs to be configured like it was an [Arduino](http://cl.ly/image/3M0P3T1A0G0l) as they share the same pin mappings.
 
-UnoPostMultiple
+GalileoPostMultiple
 ---------------
 
 This example shows how to post multiple values to multiple streams in one API call.
 
-UnoFetchValues
+GalileoFetchValues
 --------------
 
-This example reads stream values from M2X server and prints the stream data point to Serial interface. You can find the actual values in the Arduino `Serial Monitor`.
+This example reads stream values from M2X server and prints the stream data point to Serial interface. You can find the actual values in the Intelo Galileo `Serial Monitor`.
 
-EthernetUnoPost
+EthernetGalileoPost
 ---------------
 
-This example is similar to the `UnoPost`, except that EthernetClient is used instead of WifiClient. If you are using an Ethernet Shield instead of a Wifi Shield, you can use this example.
+This example is similar to the `GalileoPost`, except that EthernetClient is used instead of WifiClient. If you are using an Ethernet Shield instead of a Wifi Shield, you can use this example.
 
-EthernetUnoReceive
+EthernetGalileoReceive
 ------------------
 
-This example is similar to the `UnoReceive`, except that EthernetClient is used instead of WifiClient.
+This example is similar to the `GalileoReceive`, except that EthernetClient is used instead of WifiClient.
 
-UnoUpdateLocation
+GalileoUpdateLocation
 -----------------
 
 This example sends location data to M2X. Ideally a GPS device should be used here to read the coordinates, but for simplicity, we just use pre-set values here to show how to use the API.
 
-UnoReadLocation
+GalileoReadLocation
 ---------------
 
-This example reads location data of a feed from M2X, and prints them to Serial interface. You can check the output in the `Serial Monitor` of the Arduino IDE.
+This example reads location data of a feed from M2X, and prints them to Serial interface. You can check the output in the `Serial Monitor` of the Intelo Galileo IDE.
 
-UnoDelete
+GalileoDelete
 ---------
 
 This example shows how to delete values within a stream by providing a date/time range.
-
-YunPost
--------
-
-This example works like `YunPost`, except that it works on an [Arduino Yun](http://arduino.cc/en/Main/ArduinoBoardYun) board instead of an [Arduino Uno](http://arduino.cc/en/Main/arduinoBoardUno) board.
 
 LICENSE
 =======
