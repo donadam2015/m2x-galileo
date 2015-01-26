@@ -1,6 +1,8 @@
 Intel Galileo M2X API Client
 =====================
 
+###*(V1 API Only)*###
+
 The Intel Galileo library is used to send/receive data to/from [AT&amp;T's M2X service](https://m2x.att.com/) from [Intel Galileo](http://arduino.cc/en/ArduinoCertified/IntelGalileo) based devices.
 
 **NOTE**: Unless stated otherwise, the following instructions are specific to Gen 1 boards. If you are using other boards, the exact steps may vary.
