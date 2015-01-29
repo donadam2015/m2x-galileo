@@ -12,10 +12,10 @@ Getting Started
 1. Signup for an [M2X Account](https://m2x.att.com/signup).
 2. Obtain your _Master Key_ from the Master Keys tab of your [Account Settings](https://m2x.att.com/account) screen.
 3. Create your first [Data Source Blueprint](https://m2x.att.com/blueprints) and copy its _Feed ID_.
-4. Review the [M2X API Documentation](https://m2x.att.com/developer/documentation/overview).
+4. Review the [M2X API Documentation](https://m2x.att.com/developer/documentation/v1/overview).
 5. Obtain an Intel Galileo with a compatible Mini PCI-E wifi or ethernet.
 
-Please consult the [M2X glossary](https://m2x.att.com/developer/documentation/glossary) if you have questions about any M2X specific terms.
+Please consult the [M2X glossary](https://m2x.att.com/developer/documentation/v1/glossary) if you have questions about any M2X specific terms.
 
 How to Install the library
 ==========================
@@ -199,7 +199,7 @@ In the M2XStreamClient, 4 types of API functions are provided:
 Returned values
 ---------------
 
-For all those functions, the HTTP status code will be returned if we can fulfill an HTTP request. For example, `200` will be returned upon success, and `401` will be returned if we didn't provide a valid M2X API Key. A full-list of M2X API error codes can be found here: [M2X API Error Codes] (https://m2x.att.com/developer/documentation/overview#Client-Errors)
+For all those functions, the HTTP status code will be returned if we can fulfill an HTTP request. For example, `200` will be returned upon success, and `401` will be returned if we didn't provide a valid M2X API Key. A full-list of M2X API error codes can be found here: [M2X API Error Codes] (https://m2x.att.com/developer/documentation/v1/overview#Client-Errors)
 
 Otherwise, the following error codes will be used:
 
