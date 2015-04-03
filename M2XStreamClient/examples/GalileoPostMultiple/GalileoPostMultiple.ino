@@ -4,12 +4,12 @@
 
 #include "M2XStreamClient.h"
 
-char ssid[] = "'<ssid>'";         //  your network SSID (name); note the inner single quote marks, these must stay in-place for the Galileo
-char pass[] = "'<WPA password>'"; // your network password (use for WPA, or use as key for WEP); note the inner single quote marks, these must stay in-place for the Galileo
+char ssid[] = "<ssid>"; //  your network SSID (name)
+char pass[] = "<WPA password>";    // your network password (use for WPA, or use as key for WEP)
 
 int status = WL_IDLE_STATUS;
 
-char feedId[] = "<feed id>"; // Feed you want to push to
+char deviceId[] = "<device id>"; // Device you want to push to
 char m2xKey[] = "<M2X access key>"; // Your M2X access key
 
 const char *streamNames[] = { "temperature", "humidity" };
@@ -47,8 +47,8 @@ void setup() {
 }
 
 void loop() {
-  int response = m2xClient.postMultiple(feedId, 2, streamNames,
-                                        counts, ats, values);
+  int response = m2xClient.postDeviceUpdates(deviceId, 2, streamNames,
+                                             counts, ats, values);
   Serial.print("M2x client response code: ");
   Serial.println(response);
 

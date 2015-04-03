@@ -4,13 +4,13 @@
 
 #include "M2XStreamClient.h"
 
-char ssid[] = "'<ssid>'";         //  your network SSID (name); note the inner single quote marks, these must stay in-place for the Galileo
-char pass[] = "'<WPA password>'"; // your network password (use for WPA, or use as key for WEP); note the inner single quote marks, these must stay in-place for the Galileo
+char ssid[] = "<ssid>"; //  your network SSID (name)
+char pass[] = "<WPA password>";    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 
-char feedId[] = "<feed id>"; // Feed you want to receive values
+char deviceId[] = "<device id>"; // Device you want to receive values
 char streamName[] = "<stream name>"; // Stream you want to receive values
 char m2xKey[] = "<M2X access key>"; // Your M2X access key
 
@@ -53,7 +53,7 @@ void setup() {
 }
 
 void loop() {
-  int response = m2xClient.fetchValues(feedId, streamName, on_data_point_found, NULL);
+  int response = m2xClient.listStreamValues(deviceId, streamName, on_data_point_found, NULL);
   Serial.print("M2x client response code: ");
   Serial.println(response);
 

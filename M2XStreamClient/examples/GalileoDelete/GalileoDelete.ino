@@ -4,13 +4,13 @@
 
 #include "M2XStreamClient.h"
 
-char ssid[] = "'<ssid>'";         //  your network SSID (name); note the inner single quote marks, these must stay in-place for the Galileo
-char pass[] = "'<WPA password>'"; // your network password (use for WPA, or use as key for WEP); note the inner single quote marks, these must stay in-place for the Galileo
+char ssid[] = "<ssid>"; //  your network SSID (name)
+char pass[] = "<WPA password>";    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 
-char feedId[] = "<feed id>"; // Feed you want to post to
+char deviceId[] = "<device id>"; // Device you want to post to
 char streamName[] = "<stream name>"; // Stream you want to post to
 char m2xKey[] = "<M2X access key>"; // Your M2X access key
 
@@ -44,7 +44,7 @@ void setup() {
   printWifiStatus();
 
   // Delete values
-  int response = m2xClient.deleteValues(feedId,
+  int response = m2xClient.deleteValues(deviceId,
                                         streamName,
                                         fromTime,
                                         endTime);
