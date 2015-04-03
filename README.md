@@ -331,7 +331,7 @@ We provide a series of examples that will help you get an idea of how to use the
 
 Note that the examples contain fictionary variables, and that they need to be configured as per the instructions above before running on your Intel Galileo board. Each of the examples here also needs either a Wifi PCI Card or onboard Ethernet hooked up to your device.
 
-In the `UnoPost`, `EthernetUnoPost` and `YunPost`, a temperature sensor, a breadboard and 5 wires are also needed to get temperature data, and you will need to wire the board like [this](http://cl.ly/image/3M0P3T1A0G0l) before running the code.
+In the `GalileoPost`, `EthernetGalileoPost`, a temperature sensor, a breadboard and 5 wires are also needed to get temperature data.
 
 After you have configured your variables and the board, plug the Intel Galileo board into your computer via a Micro-USB cable, click `Verify` in the Intel Galileo IDE, then click `Upload`, and the code should be uploaded to the board. You can check all the outputs in the `Serial Monitor` of the Intel Galileo IDE.
 
